@@ -1,0 +1,30 @@
+#include <ESP8266WiFi.h>
+#include <BlynkSimpleEsp8266.h>
+#include <Servo.h>
+
+char auth[] = "Your Blynk Auth Token";  // Blynk Auth Token
+char ssid[] = "Your WiFi SSID";          // WiFi SSID
+char pass[] = "Your WiFi Password";      // WiFi Password
+
+Servo myServo;
+int servoPin = D4;   // Pin connected to the servo signal pin
+
+BLYNK_WRITE(V1)  // Slider widget on Blynk app is connected to virtual pin V1
+{
+  int position = param.asInt();  // Get the position from the Blynk slider
+  myServo.write(position);       // Set the servo position
+}
+
+void setup()
+{
+  Serial.begin(115200);
+  Blynk.begin(auth, ssid, pass);
+  
+  myServo.attach(servoPin);  // Attach the servo to the pin
+  myServo.write(0);          // Start the servo at position 0 degrees
+}
+
+void loop()
+{
+  Blynk.run();  // Run the Blynk app
+}
